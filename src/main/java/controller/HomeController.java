@@ -8,7 +8,13 @@ public class HomeController {
 
     @RequestMapping("/home")
     public String home() {
-        System.out.println("==** This is HomeController **==");
+        System.out.println("==** This is Home Page **==");
         return "home";
+    }
+
+    @RequestMapping("/about")
+    public String about() {
+        System.out.println("==** This is About Page **==");
+        return "about";
     }
 }

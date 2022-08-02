@@ -1,4 +1,4 @@
-<%--
+<%@ page import="java.util.List" %><%--
   Created by IntelliJ IDEA.
   User: ashraful
   Date: ২/৮/২২
@@ -11,6 +11,18 @@
     <title>About</title>
 </head>
 <body>
-  <h1> This is our About Page </h1>
+    <h1> This is our About Page </h1>
+    <%
+        List<String> infos = (List<String>) request.getAttribute("info");
+    %>
+
+    <%
+        for(String info : infos) {
+    %>
+        <h1> <%= info %> </h1>
+    <%
+        }
+    %>
+
 </body>
 </html>

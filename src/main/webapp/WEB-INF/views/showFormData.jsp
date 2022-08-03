@@ -18,6 +18,8 @@
 
 <%--    <h1> Welcome ${email}, and your password is ${password} </h1>--%>
     <%--  now trying value from ModelAttribute user object  --%>
-    <h1> Welcome ${user.email}, and your password is ${user.password} </h1>
+    <h1> Welcome ${user.email}, and your password is ${user.password} </h1> <!-- this one is for User class object and JSP assume that object name as user -->
+    <h1> Welcome ${userOrm.email}, and your password is ${userOrm.password} </h1> <!-- this one is for UserOrm class object and JSP assume that object name as userOrm -->
+    <h2> User Created Message: ${msg}</h2>
 </body>
 </html>

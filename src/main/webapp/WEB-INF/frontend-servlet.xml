@@ -1,16 +1,69 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
     http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
     http://www.springframework.org/schema/context
-    http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+    http://www.springframework.org/schema/context/spring-context-3.0.xsd
+    http://www.springframework.org/schema/tx
+    http://www.springframework.org/schema/tx/spring-tx.xsd">
 
-    <context:component-scan base-package = "controller" />
+    <!--  enabling transaction in DB using hibernate  -->
+    <tx:annotation-driven />
+
+<!--    <context:component-scan base-package = "controller, model, dao, service" /> &lt;!&ndash; only scan controller package and create bean of that classes &ndash;&gt;-->
+    <context:component-scan base-package = "controller, model, dao, service" /> <!-- scan all the packages and create bean of the classes inside the packages -->
 
     <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver" name="viewResolver">
         <property name="prefix" value="/WEB-INF/views/" /> <!-- prefix means the folder location, where our view pages will reside -->
         <property name="suffix" value=".jsp" /> <!-- suffix means the ending of how our view page will end | and page name will be decided from our controller -->
+    </bean>
+
+
+    <!--  creating datasource bean  -->
+    <bean class="org.springframework.jdbc.datasource.DriverManagerDataSource" name="ds">
+        <property name="driverClassName" value="com.mysql.jdbc.Driver" />
+        <property name="url" value="jdbc:mysql://localhost:3306/springmvcjdbc" />
+        <property name="username" value="root" />
+        <property name="password" value="password" />
+    </bean>
+
+    <!--  creating factory bean for hibernate -->
+    <bean class="org.springframework.orm.hibernate5.LocalSessionFactoryBean" name="factory">
+
+        <!--   datasource property     -->
+        <property name="dataSource" ref="ds"></property>
+
+        <!--   hibernate property     -->
+        <property name="hibernateProperties">
+            <props>
+                <prop key="hibernate.dialect">org.hibernate.dialect.MySQL8Dialect</prop>
+                <prop key="hibernate.show_sql">true</prop>
+                <prop key="hibernate.hbm2ddl.auto">update</prop>
+            </props>
+        </property>
+
+        <!--   annotated classes which means @Entity    -->
+        <property name="annotatedClasses">
+            <list>
+                <value>
+                     model.UserOrm
+                </value>
+            </list>
+        </property>
+    </bean>
+
+    <!--  now setting configuration for hibernateTemplate for creating bean  -->
+    <bean class="org.springframework.orm.hibernate5.HibernateTemplate" name="hibernateTemplate">
+        <property name="sessionFactory" ref="factory"> </property> <!-- prefix means the folder location, where our view pages will reside -->
+    </bean>
+
+
+    <!--  configuring writing permission for hibernateTemplate inside dao layer and save data to the db and it also enables the @Transactional annotation -->
+    <bean class="org.springframework.orm.hibernate5.HibernateTransactionManager" name="transactionManager">
+        <property name="sessionFactory" ref="factory"></property>
     </bean>
 
 </beans>

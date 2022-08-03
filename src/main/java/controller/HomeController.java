@@ -3,6 +3,7 @@ package controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,5 +29,15 @@ public class HomeController {
 
         model.addAttribute("info", info);
         return "about";
+    }
+
+    @RequestMapping("/help")
+    public ModelAndView help() {
+        ModelAndView modelAndView = new ModelAndView();
+        // setting the data
+        modelAndView.addObject("country", "Bangladesh");
+        // setting the jsp page name
+        modelAndView.setViewName("help");
+        return modelAndView;
     }
 }

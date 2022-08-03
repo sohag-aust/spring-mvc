@@ -6,6 +6,8 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page isELIgnored="false" %> <!-- enabling expression language. by default isElIgnored is true -->
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %> <!-- enabling jstl -->
 <!doctype html>
 <html lang="en">
 <head>
@@ -20,6 +22,9 @@
 </head>
 <body>
     <div class="container mt-5">
+        <h1 class="text-center">${title}</h1>
+        <h2 class="text-center">${desc}</h2>
+
         <form action="processForm" method="post">
             <div class="form-group">
                 <label for="exampleInputEmail1">Email address</label>

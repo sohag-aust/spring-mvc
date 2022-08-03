@@ -13,6 +13,11 @@
     <title>Data From Contact Form</title>
 </head>
 <body>
-    <h1> Welcome ${email}, and your password is ${password} </h1>
+    <h1>${title}</h1>
+    <h2>${desc}</h2>
+
+<%--    <h1> Welcome ${email}, and your password is ${password} </h1>--%>
+    <%--  now trying value from ModelAttribute user object  --%>
+    <h1> Welcome ${user.email}, and your password is ${user.password} </h1>
 </body>
 </html>

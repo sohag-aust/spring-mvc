@@ -1,0 +1,21 @@
+<!DOCTYPE web-app PUBLIC
+ "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+ "http://java.sun.com/dtd/web-app_2_3.dtd" >
+
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+         id="WebApp_ID" version="2.5">
+
+  <display-name>Archetype Created Web Application</display-name>
+  <!-- configure dispatcher servlet -->
+  <servlet>
+    <servlet-name>frontend</servlet-name>
+    <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class> <!-- this is the fully qualified name of our servlet class -->
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>frontend</servlet-name>
+    <url-pattern>/</url-pattern> <!-- / will handle all the request of main DispatcherServlet -->
+  </servlet-mapping>
+</web-app>

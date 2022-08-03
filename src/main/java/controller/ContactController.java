@@ -1,6 +1,7 @@
 package controller;
 
 import model.User;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -18,7 +19,7 @@ public class ContactController {
         model.addAttribute("desc", "Make it simple");
     }
 
-    @RequestMapping("/contact")
+    @RequestMapping(value = "/contact", method = RequestMethod.GET)
     public String showForm() {
         return "contact";
     }
@@ -33,12 +34,12 @@ public class ContactController {
 //        return "showFormData";
 //    }
 
-    @RequestMapping(path = "/processForm", method = RequestMethod.POST)
-    public String getFormDataUsingModelAttribute(@ModelAttribute User user) { // ModelAttribute binds the user object data with form data using user.setter methods, and also it set model.addAttribute, which we have done using (Model model) before
-
-        System.out.println(user);
-
-//        model.addAttribute("user", user);
-        return "showFormData";
-    }
+//    @RequestMapping(path = "/processForm", method = RequestMethod.POST)
+//    public String getFormDataUsingModelAttribute(@ModelAttribute User user) { // ModelAttribute binds the user object data with form data using user.setter methods, and also it set model.addAttribute, which we have done using (Model model) before
+//
+//        System.out.println(user);
+//
+////        model.addAttribute("user", user);
+//        return "showFormData";
+//    }
 }

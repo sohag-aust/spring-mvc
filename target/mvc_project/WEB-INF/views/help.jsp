@@ -6,6 +6,7 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page isELIgnored="false" %>
 <html>
 <head>
     <title>Help Page</title>
@@ -16,5 +17,6 @@
         String country = (String) request.getAttribute("country");
     %>
     <h2> Country Name is : <%= country %></h2>
+    <h2> Country Name using Expression Language (EL) : ${country} </h2> <!-- here country is the key name -->
 </body>
 </html>

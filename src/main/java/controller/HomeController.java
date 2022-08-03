@@ -36,6 +36,16 @@ public class HomeController {
         ModelAndView modelAndView = new ModelAndView();
         // setting the data
         modelAndView.addObject("country", "Bangladesh");
+
+        List<String> divisions = new ArrayList<>();
+        divisions.add("Dhaka");
+        divisions.add("Chittagong");
+        divisions.add("Khulna");
+        divisions.add("Rajshahi");
+        divisions.add("Sylhet");
+
+        modelAndView.addObject("divisions", divisions);
+
         // setting the jsp page name
         modelAndView.setViewName("help");
         return modelAndView;

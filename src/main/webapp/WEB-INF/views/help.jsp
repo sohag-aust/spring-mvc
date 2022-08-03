@@ -29,7 +29,7 @@
         <h3> Using Expression Language: ${division} </h3>
 
         <%--  Print Data using JSTL  --%>
-        <h3> Using JSTL: <c:out value="${item}"></c:out> </h3>
+        <h3> Using JSTL: <c:out value="${division}"></c:out> </h3>
     </c:forEach>
 
 </body>

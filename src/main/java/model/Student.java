@@ -18,6 +18,9 @@ public class Student {
     private String gender;
     private String studentType;
 
+    // custom type field
+    private Address address;
+
     public String getName() {
         return name;
     }
@@ -64,6 +67,14 @@ public class Student {
 
     public void setStudentType(String studentType) {
         this.studentType = studentType;
+    }
+
+    public Address getAddress() {
+        return address;
+    }
+
+    public void setAddress(Address address) {
+        this.address = address;
     }
 
     @Override

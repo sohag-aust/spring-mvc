@@ -15,7 +15,7 @@
 <body class="" style="background: #e2e2e2;">
 <div class="container mt-4">
     <div class="row">
-        <div class="col-md-6 offset-md-3">
+        <div class="col-md-8 offset-md-2">
             <div class="card">
                 <div class="card-body">
                     <h3 class="text-center"> Complex Form</h3>
@@ -124,6 +124,18 @@
                                 <option value="oldStudent">Old Student</option>
                                 <option value="normalStudent">Normal Student</option>
                             </select>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-body">
+                                <p> Your Address </p>
+                                <div class="form-group">
+                                    <input name="address.street" type="text" class="form-control" placeholder="Enter Street" /> <!-- dynamic field binding of address object inside student object -->
+                                </div>
+                                <div class="form-group">
+                                    <input name="address.city" type="text" class="form-control" placeholder="Enter City" /> <!-- dynamic field binding of address object inside student object -->
+                                </div>
+                            </div>
                         </div>
 
                         <div class="container text-center">

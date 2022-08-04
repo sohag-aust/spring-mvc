@@ -1,4 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="errorTag" uri="http://www.springframework.org/tags/form" %>
 <!doctype html>
 <html lang="en">
 <head>
@@ -19,6 +20,9 @@
             <div class="card">
                 <div class="card-body">
                     <h3 class="text-center"> Complex Form</h3>
+                    <div class="alert alert-danger" role="alert">
+                        <errorTag:errors path="studentModel.*" /> <!-- errorTag is the name of taglib used at top of this page -->
+                    </div>
                     <form action="handleComplexForm" method="post">
                         <div class="form-group">
                             <label for="name">

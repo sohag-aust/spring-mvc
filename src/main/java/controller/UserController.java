@@ -28,6 +28,10 @@ public class UserController {
 
         System.out.println("user from contact page: " + user);
 
+        if(user.getEmail().equals("abc@gmail.com")) {
+            return "redirect:/home";
+        }
+
         int userId = this.userService.createUser(user);
         model.addAttribute("msg", "user created successfully with id: " + userId);
         return "showFormData";

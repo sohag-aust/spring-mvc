@@ -34,6 +34,13 @@
                             </label>
                             <p>${student.name}</p>
                         </div>
+                        <hr>
+                        <div class="form-group">
+                            <label>
+                                Your Street: &nbsp;
+                            </label>
+                            <p>${student.address.street}</p>
+                        </div>
                     </form>
                 </div>
             </div>

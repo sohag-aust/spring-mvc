@@ -1,20 +1,26 @@
 package controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
 import model.FakeUser;
+import model.FakeUserModel;
+import model.JsonPlaceHolderData;
 import model.UserOrm;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 import service.UserService;
+
+import java.util.List;
 
 @Controller
 public class UserController {
@@ -82,6 +88,28 @@ public class UserController {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("user", fakeUserResponse);
         modelAndView.setViewName("showFakeUserData");
+
+        return modelAndView;
+    }
+
+    @RequestMapping("/showUsers")
+    public ModelAndView getAllUsers() throws JsonProcessingException {
+        String BASE_URL = "http://localhost:8081/api/users/";
+
+        Client client = Client.create();
+        WebResource webResource = client.resource(BASE_URL);
+        ClientResponse response = webResource.accept("application/json").get(ClientResponse.class);
+
+        String output = response.getEntity(String.class);
+
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        List<FakeUserModel> users = objectMapper.readValue(output, new TypeReference<List<FakeUserModel>>(){});
+        System.out.println("==** All Users Data: " + users);
+
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.addObject("users", users);
+        modelAndView.setViewName("showAllUser");
 
         return modelAndView;
     }

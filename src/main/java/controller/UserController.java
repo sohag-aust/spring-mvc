@@ -13,6 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.ModelAndView;
 import service.UserService;
 
 @Controller
@@ -50,7 +51,7 @@ public class UserController {
     }
 
     @RequestMapping(path = "/saveFakeUser", method = RequestMethod.POST)
-    public String saveFakeUser(@ModelAttribute FakeUser fakeUser) throws JsonProcessingException {
+    public ModelAndView saveFakeUser(@ModelAttribute FakeUser fakeUser) throws JsonProcessingException {
         System.out.println("==** Saving Fake User: " + fakeUser);
 
         String BASE_URL = "http://localhost:8081/api/users/saveFakeUser";
@@ -78,6 +79,10 @@ public class UserController {
 
         System.out.println("==** FakeUser from Response: " + fakeUserResponse);
 
-        return "showFakeUserData";
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.addObject("user", fakeUserResponse);
+        modelAndView.setViewName("showFakeUserData");
+
+        return modelAndView;
     }
 }

@@ -20,6 +20,9 @@
     <title>All Users</title>
 </head>
 <body>
+    <div class="container mx-auto text-center">
+        <a href="fakeUserForm" class="btn btn-primary">Add User</a>
+    </div>
     <%-- Showing Users using JSTL --%>
     <c:forEach var="user" items="${users}">
         <h3> Id: ${user.id} </h3>

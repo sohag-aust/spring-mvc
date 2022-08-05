@@ -176,4 +176,19 @@ public class UserController {
 
         return "redirect:/showUsers"; // redirect to showUsers URL
     }
+
+
+    @RequestMapping(path = "/deleteUserById/{userId}") // by default delete works on GET method from jsp
+    public String delete(@PathVariable Long userId) {
+
+        System.out.println("==** Inside Delete Method **==");
+        String BASE_URL = "http://localhost:8081/api/users/"+userId;
+
+        Client client = Client.create();
+        WebResource webResource = client.resource(BASE_URL);
+        ClientResponse response = webResource.delete(ClientResponse.class);
+        System.out.println("==** Response for delete: " + response);
+
+        return "redirect:/showUsers";
+    }
 }

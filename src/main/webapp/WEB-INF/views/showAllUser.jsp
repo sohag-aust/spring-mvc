@@ -28,6 +28,7 @@
         <h3> Password: ${user.password} </h3>
         <h3> About: ${user.about} </h3>
         <a href="editUserById/${user.id}" class="btn btn-warning">Edit</a>
+        <a href="deleteUserById/${user.id}" class="btn btn-danger">Delete</a>
         <hr>
     </c:forEach>
 

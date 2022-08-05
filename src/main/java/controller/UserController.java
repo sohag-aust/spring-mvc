@@ -113,4 +113,67 @@ public class UserController {
 
         return modelAndView;
     }
+
+    @RequestMapping("/editUserById/{userId}")
+    public ModelAndView getUserById(@PathVariable Long userId) throws JsonProcessingException {
+        String BASE_URL = "http://localhost:8081/api/users/"+userId;
+
+        Client client = Client.create();
+        WebResource webResource = client.resource(BASE_URL);
+        ClientResponse response = webResource.accept("application/json").get(ClientResponse.class);
+
+        String output = response.getEntity(String.class);
+
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        FakeUserModel user = objectMapper.readValue(output, new TypeReference<FakeUserModel>(){});
+        System.out.println("==** User Data by Id: " + user);
+
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.addObject("userById", user);
+        modelAndView.setViewName("editUserForm");
+        return modelAndView;
+    }
+
+    @RequestMapping(path = "/editUserById/updateFakeUser", method = RequestMethod.POST)
+    public String updateFakeUser(@ModelAttribute FakeUserModel fakeUserModel) throws JsonProcessingException {
+
+        System.out.println("==** Updating Starts **==");
+        System.out.println("==** ModelAttribute FakeUserModel: " + fakeUserModel);
+
+        FakeUser fakeUser = new FakeUser();
+        fakeUser.setUser_name(fakeUserModel.getUser_name());
+        fakeUser.setEmail(fakeUserModel.getEmail());
+        fakeUser.setPassword(fakeUserModel.getPassword());
+        fakeUser.setAbout(fakeUserModel.getAbout());
+
+        System.out.println("==** Updating Fake User: " + fakeUser);
+
+        String BASE_URL = "http://localhost:8081/api/users/updateFakeUser/"+fakeUserModel.getId();
+
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        String convertObjectToJson = objectMapper.writeValueAsString(fakeUser);
+        System.out.println("==** convertObjectToJson: " + convertObjectToJson);
+
+        Client client = Client.create();
+        WebResource webResource = client.resource(BASE_URL);
+
+        // POST method
+        ClientResponse response = webResource
+                .header("Content-Type", "application/json")
+                .put(ClientResponse.class, convertObjectToJson);
+
+        System.out.println("==** Response : " + response);
+
+        String output = response.getEntity(String.class);
+        System.out.println("==** Output from Response: " + output);
+
+        Gson gson = new Gson();
+        FakeUser fakeUserResponse = gson.fromJson(output, FakeUser.class);
+
+        System.out.println("==** FakeUser from Response: " + fakeUserResponse);
+
+        return "redirect:/showUsers"; // redirect to showUsers URL
+    }
 }

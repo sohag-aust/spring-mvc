@@ -14,7 +14,7 @@
     <tx:annotation-driven />
 
 <!--    <context:component-scan base-package = "controller, model, dao, service" /> &lt;!&ndash; only scan controller package and create bean of that classes &ndash;&gt;-->
-    <context:component-scan base-package = "controller, model, dao, service" /> <!-- scan all the packages and create bean of the classes inside the packages -->
+    <context:component-scan base-package = "controller, model, dao, service, config" /> <!-- scan all the packages and create bean of the classes inside the packages -->
 
     <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver" name="viewResolver">
         <property name="prefix" value="/WEB-INF/views/" /> <!-- prefix means the folder location, where our view pages will reside -->

@@ -7,17 +7,13 @@ import com.google.gson.Gson;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
-import model.FakeUser;
-import model.FakeUserModel;
-import model.JsonPlaceHolderData;
-import model.UserOrm;
+import model.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import service.ActiveMQProducer;
 import service.UserService;
 
 import java.util.List;
@@ -26,9 +22,11 @@ import java.util.List;
 public class UserController {
 
     private UserService userService;
+    private final ActiveMQProducer activeMQProducer;
 
-    public UserController(UserService userService) {
+    public UserController(UserService userService, ActiveMQProducer activeMQProducer) {
         this.userService = userService;
+        this.activeMQProducer = activeMQProducer;
     }
 
     @ModelAttribute
@@ -51,13 +49,28 @@ public class UserController {
         return "showFormData";
     }
 
+    @RequestMapping(path = "/sendEmail")
+    public String sendEmailToRegisteredUser(Model model) throws JsonProcessingException {
+
+        FakeUser fakeUser = (FakeUser) model.asMap().get("registeredUser");
+        System.out.println("==** Model for sendEmail: " + fakeUser);
+
+        ActiveMQMessage activeMQMessage = new ActiveMQMessage();
+        activeMQMessage.setUserName(fakeUser.getUser_name());
+        activeMQMessage.setMailTo(fakeUser.getEmail());
+        activeMQMessage.setMessageOption("simpleEmail");
+        activeMQProducer.sendMessage(activeMQMessage);
+
+        return "redirect:/showUsers";
+    }
+
     @RequestMapping(path = "/fakeUserForm")
     public String saveFakeUserForm() {
         return "fakeUserForm";
     }
 
     @RequestMapping(path = "/saveFakeUser", method = RequestMethod.POST)
-    public ModelAndView saveFakeUser(@ModelAttribute FakeUser fakeUser) throws JsonProcessingException {
+    public String saveFakeUser(@ModelAttribute FakeUser fakeUser, RedirectAttributes redirectAttributes) throws JsonProcessingException {
         System.out.println("==** Saving Fake User: " + fakeUser);
 
         String BASE_URL = "http://localhost:8081/api/users/saveFakeUser";
@@ -89,7 +102,9 @@ public class UserController {
         modelAndView.addObject("user", fakeUserResponse);
         modelAndView.setViewName("showFakeUserData");
 
-        return modelAndView;
+        redirectAttributes.addFlashAttribute("registeredUser", fakeUserResponse);
+
+        return "redirect:/sendEmail";
     }
 
     @RequestMapping("/showUsers")

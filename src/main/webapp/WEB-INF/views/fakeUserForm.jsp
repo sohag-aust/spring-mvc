@@ -76,6 +76,19 @@
                             />
                         </div>
 
+                        <div class="form-check">
+                            <input
+                                    class="form-check-input"
+                                    type="checkbox"
+                                    id="flexCheckChecked"
+                                    name="sentAttachment"
+                                    value="EmailWithAttachment"
+                            />
+                            <label class="form-check-label" for="flexCheckChecked">
+                                sent email with attachment
+                            </label>
+                        </div>
+
                         <div class="container text-center">
                             <button type="submit" class="btn btn-success"> Submit </button>
                         </div>

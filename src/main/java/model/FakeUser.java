@@ -6,6 +6,8 @@ public class FakeUser {
     private String password;
     private String about;
 
+    private String sentAttachment;
+
     public FakeUser() {
     }
 
@@ -48,6 +50,14 @@ public class FakeUser {
         this.about = about;
     }
 
+    public String getSentAttachment() {
+        return sentAttachment;
+    }
+
+    public void setSentAttachment(String sentAttachment) {
+        this.sentAttachment = sentAttachment;
+    }
+
     @Override
     public String toString() {
         return "FakeUser{" +
@@ -55,6 +65,7 @@ public class FakeUser {
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
                 ", about='" + about + '\'' +
+                ", sentAttachment='" + sentAttachment + '\'' +
                 '}';
     }
 }

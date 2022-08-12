@@ -51,14 +51,21 @@ public class UserController {
 
     @RequestMapping(path = "/sendEmail")
     public String sendEmailToRegisteredUser(Model model) throws JsonProcessingException {
+        System.out.println("==** Model in sendEmailToRegisteredUser: " + model);
 
-        FakeUser fakeUser = (FakeUser) model.asMap().get("registeredUser");
+        FakeUserWithoutAttachment fakeUser = (FakeUserWithoutAttachment) model.asMap().get("registeredUser");
         System.out.println("==** Model for sendEmail: " + fakeUser);
 
         ActiveMQMessage activeMQMessage = new ActiveMQMessage();
         activeMQMessage.setUserName(fakeUser.getUser_name());
         activeMQMessage.setMailTo(fakeUser.getEmail());
-        activeMQMessage.setMessageOption("simpleEmail");
+
+        if(model.getAttribute("sentAttachment") != null && model.getAttribute("sentAttachment").equals("EmailWithAttachment")) {
+            activeMQMessage.setMessageOption("EmailWithAttachment");
+        } else {
+            activeMQMessage.setMessageOption("simpleEmail");
+        }
+
         activeMQProducer.sendMessage(activeMQMessage);
 
         return "redirect:/showUsers";
@@ -70,8 +77,16 @@ public class UserController {
     }
 
     @RequestMapping(path = "/saveFakeUser", method = RequestMethod.POST)
-    public String saveFakeUser(@ModelAttribute FakeUser fakeUser, RedirectAttributes redirectAttributes) throws JsonProcessingException {
-        System.out.println("==** Saving Fake User: " + fakeUser);
+    public String saveFakeUser(@ModelAttribute FakeUser fakeUser1, RedirectAttributes redirectAttributes, Model model) throws JsonProcessingException {
+        System.out.println("==** Saving Fake User: " + fakeUser1);
+
+        FakeUserWithoutAttachment fakeUser = new FakeUserWithoutAttachment();
+        fakeUser.setUser_name(fakeUser1.getUser_name());
+        fakeUser.setEmail(fakeUser1.getEmail());
+        fakeUser.setPassword(fakeUser1.getPassword());
+        fakeUser.setAbout(fakeUser1.getAbout());
+
+        System.out.println("==** Final FakeUser Model: " + fakeUser);
 
         String BASE_URL = "http://localhost:8081/api/users/saveFakeUser";
 
@@ -94,7 +109,7 @@ public class UserController {
         System.out.println("==** Output from Response: " + output);
 
         Gson gson = new Gson();
-        FakeUser fakeUserResponse = gson.fromJson(output, FakeUser.class);
+        FakeUserWithoutAttachment fakeUserResponse = gson.fromJson(output, FakeUserWithoutAttachment.class);
 
         System.out.println("==** FakeUser from Response: " + fakeUserResponse);
 
@@ -103,6 +118,7 @@ public class UserController {
         modelAndView.setViewName("showFakeUserData");
 
         redirectAttributes.addFlashAttribute("registeredUser", fakeUserResponse);
+        redirectAttributes.addFlashAttribute("sentAttachment", fakeUser1.getSentAttachment()); // this value will add into model
 
         return "redirect:/sendEmail";
     }

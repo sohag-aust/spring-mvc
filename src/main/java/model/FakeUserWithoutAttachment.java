@@ -1,20 +1,10 @@
 package model;
 
-public class FakeUserModel {
-    private Long id;
+public class FakeUserWithoutAttachment {
     private String user_name;
     private String email;
     private String password;
     private String about;
-    private boolean isSentAttachment;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public String getUser_name() {
         return user_name;
@@ -48,19 +38,10 @@ public class FakeUserModel {
         this.about = about;
     }
 
-    public boolean isSentAttachment() {
-        return isSentAttachment;
-    }
-
-    public void setSentAttachment(boolean sentAttachment) {
-        isSentAttachment = sentAttachment;
-    }
-
     @Override
     public String toString() {
-        return "FakeUserModel{" +
-                "id=" + id +
-                ", user_name='" + user_name + '\'' +
+        return "FakeUserWithoutAttachment{" +
+                "user_name='" + user_name + '\'' +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
                 ", about='" + about + '\'' +

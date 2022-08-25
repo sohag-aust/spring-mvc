@@ -8,16 +8,31 @@ import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.jms.TextMessage;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
 public class ActiveMQProducer {
 
 //    private static final Logger log = LoggerFactory.getLogger(ActiveMQProducer.class);
 
-    private final JmsTemplate jmsTemplate;
+    private List<JmsTemplate> jmsTemplates;
 
-    public ActiveMQProducer(JmsTemplate jmsTemplate) {
-        this.jmsTemplate = jmsTemplate;
+    private AtomicInteger current = new AtomicInteger(0);
+
+    public ActiveMQProducer() {
+        this.jmsTemplates = ActiveMQConfig.getJmsQueueTemplates();
+    }
+
+    private JmsTemplate findJmsTemplate_LoadBalanced() {
+        int cur = current.getAndIncrement();
+        int index = cur % this.jmsTemplates.size();
+
+        System.out.println("==** All JmsTemplates : " + this.jmsTemplates);
+        System.out.println("\tFind Load balanced JmsTemplate[ " + index + " ]");
+
+        return this.jmsTemplates.get(index);
     }
 
     public void sendMessage(ActiveMQMessage activeMQMessage) throws JsonProcessingException {
@@ -26,6 +41,8 @@ public class ActiveMQProducer {
 
         try {
             String jsonObj = new ObjectMapper().writer().withDefaultPrettyPrinter().writeValueAsString(activeMQMessage);
+
+            JmsTemplate jmsTemplate = findJmsTemplate_LoadBalanced();
 
             jmsTemplate.send(ActiveMQConfig.EMAIL_PROCESSING_QUEUE, messageCreator -> {
                 TextMessage message = messageCreator.createTextMessage();

@@ -12,13 +12,18 @@ import org.springframework.jms.support.converter.MessageConverter;
 import org.springframework.jms.support.converter.MessageType;
 
 import javax.jms.Queue;
+import java.util.ArrayList;
+import java.util.List;
 
 @Configuration
 @EnableJms
 public class ActiveMQConfig {
     public static final String EMAIL_PROCESSING_QUEUE = "EMAIL_PROCESSING_QUEUE";
 
-    private String brokerUrl = "tcp://localhost:61616";
+    public static List<JmsTemplate> jmsQueueTemplates = new ArrayList<>();
+
+    private String brokerUrl1 = "tcp://localhost:61616";
+    private String brokerUrl2 = "tcp://localhost:61716";
 
     @Bean
     public Queue queue() {
@@ -26,9 +31,16 @@ public class ActiveMQConfig {
     }
 
     @Bean
-    public ActiveMQConnectionFactory activeMQConnectionFactory() {
+    public ActiveMQConnectionFactory activeMQConnectionFactory1() {
         ActiveMQConnectionFactory activeMQConnectionFactory = new ActiveMQConnectionFactory();
-        activeMQConnectionFactory.setBrokerURL(brokerUrl);
+        activeMQConnectionFactory.setBrokerURL(brokerUrl1);
+        return activeMQConnectionFactory;
+    }
+
+    @Bean
+    public ActiveMQConnectionFactory activeMQConnectionFactory2() {
+        ActiveMQConnectionFactory activeMQConnectionFactory = new ActiveMQConnectionFactory();
+        activeMQConnectionFactory.setBrokerURL(brokerUrl2);
         return activeMQConnectionFactory;
     }
 
@@ -47,10 +59,24 @@ public class ActiveMQConfig {
     }
 
     @Bean
-    public JmsTemplate jmsTemplate() {
+    public JmsTemplate jmsTemplate1() {
         JmsTemplate template = new JmsTemplate();
-        template.setConnectionFactory(activeMQConnectionFactory());
+        template.setConnectionFactory(activeMQConnectionFactory1());
         template.setMessageConverter(messageConverter());
+        jmsQueueTemplates.add(template);
         return template;
+    }
+
+    @Bean
+    public JmsTemplate jmsTemplate2() {
+        JmsTemplate template = new JmsTemplate();
+        template.setConnectionFactory(activeMQConnectionFactory2());
+        template.setMessageConverter(messageConverter());
+        jmsQueueTemplates.add(template);
+        return template;
+    }
+
+    public static List<JmsTemplate> getJmsQueueTemplates() {
+        return jmsQueueTemplates;
     }
 }
